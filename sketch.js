@@ -1,13 +1,13 @@
 tf.setBackend("cpu");
 
 // The number of birds in each population
-const totalPopulation = 300;
+const totalPopulation = 100;
 
 // Birds currently alived
-let aliveBirds = [];
+let alivePlanes = [];
 
 // all the birds of the current generation
-let allBirds = [];
+let allPlanes = [];
 
 // Array which holds all the pipes on the screen
 let pipes = [];
@@ -20,11 +20,8 @@ let generation = 1;
 let generationSpan;
 
 function preload() {
-	birdImg = loadImage("assets/bird.png");
-	pipeTopImg = loadImage("assets/pipeUp.png");
-	pipeDownImg = loadImage("assets/pipeDown.png");
+    planeImg = loadImage("assets/plane.png");
 	bg = loadImage("assets/bg.png");
-	groundImg = loadImage("assets/ground.png");
 }
 
 function setup() {
@@ -33,9 +30,9 @@ function setup() {
 	generationSpan.html(generation);
 	canvas.parent("sketch");
 	for (let i = 0; i < totalPopulation; i++) {
-		let bird = new Bird();
-		aliveBirds[i] = bird;
-		allBirds[i] = bird;
+		let bird = new Plane();
+		alivePlanes[i] = bird;
+		allPlanes[i] = bird;
 	}
 }
 
@@ -48,38 +45,25 @@ function draw() {
 		}
 	}
 
-	for (let i = aliveBirds.length - 1; i >= 0; i--) {
-		let bird = aliveBirds[i];
-		bird.chooseAction(pipes);
-		bird.update();
-		for (let j = 0; j < pipes.length; j++) {
-			if (pipes[j].checkCollision(bird)) {
-				aliveBirds.splice(i, 1);
-				break;
-			}
-		}
-		if (bird.bottomTopCollision()) {
-			aliveBirds.splice(i, 1);
-		}
-	}
+	for (let i = alivePlanes.length - 1; i >= 0; i--) {
+		let plane = alivePlanes[i];
 
-	if (frameCounter % 50 === 0) {
-		pipes.push(new Pipe());
+		plane.chooseAction(pipes);
+		plane.update();
+
+		if (plane.checkCollision()) {
+			alivePlanes.splice(i, 1);
+		}
 	}
 
 	frameCounter++;
 
-	for (let i = 0; i < pipes.length; i++) {
-		pipes[i].show();
+	for (let i = 0; i < alivePlanes.length; i++) {
+		alivePlanes[i].show();
 	}
-	for (let i = 0; i < aliveBirds.length; i++) {
-		aliveBirds[i].show();
-	}
-	if (aliveBirds.length == 0) {
+	if (alivePlanes.length == 0) {
 		generation++;
 		generationSpan.html(generation);
 		createNextGeneration();
 	}
-
-	image(groundImg, 0, height - groundImg.height);
 }

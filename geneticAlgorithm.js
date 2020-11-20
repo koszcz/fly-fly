@@ -5,17 +5,16 @@ function resetGame() {
 
 function createNextGeneration() {
 	resetGame();
-	normalizeFitness(allBirds);
-	aliveBirds = generate(allBirds);
-	allBirds = aliveBirds.slice();
+	normalizeFitness(allPlanes);
+	alivePlanes = generate(allPlanes);
+	allPlanes = alivePlanes.slice();
 }
 
 function generate(oldBirds) {
 	let newBirds = [];
 	for (let i = 0; i < oldBirds.length; i++) {
 		// Select a bird based on fitness
-		let bird = poolSelection(oldBirds);
-		newBirds[i] = bird;
+		newBirds[i] = poolSelection(oldBirds);
 	}
 	return newBirds;
 }
@@ -37,7 +36,7 @@ function normalizeFitness(birds) {
 
 // An algorithm for picking one bird from an array
 // based on fitness
-function poolSelection(birds) {
+function poolSelection(planes) {
 	// Start at 0
 	let index = 0;
 
@@ -48,7 +47,7 @@ function poolSelection(birds) {
 	// Higher probabilities will be more likely to be fixed since they will
 	// subtract a larger number towards zero
 	while (r > 0) {
-		r -= birds[index].fitness;
+		r -= planes[index].fitness;
 		// And move on to the next
 		index += 1;
 	}
@@ -58,5 +57,5 @@ function poolSelection(birds) {
 
 	// Make sure it's a copy!
 	// (this includes mutation)
-	return birds[index].copy();
+	return planes[index].copy();
 }
